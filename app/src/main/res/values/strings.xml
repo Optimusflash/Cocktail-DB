@@ -2,4 +2,11 @@
     <string name="app_name">CocktailDB</string>
     <string name="retry">Retry</string>
     <string name="error_message">Something was wrong. Click to retry…</string>
+    <string name="title_activity_filters">FiltersActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="filters">Filters</string>
 </resources>

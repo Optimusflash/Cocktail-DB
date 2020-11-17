@@ -2,6 +2,7 @@ package com.optimus.cocktaildb.di.modules
 
 import androidx.lifecycle.ViewModel
 import com.optimus.cocktaildb.di.ViewModelKey
+import com.optimus.cocktaildb.ui.filters.FilterViewModel
 import com.optimus.cocktaildb.ui.main.viewmodel.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -17,8 +18,8 @@ abstract class ViewModelModule {
     @ViewModelKey(MainViewModel::class)
     abstract fun provideMainViewModel(mainViewModel: MainViewModel): ViewModel
 
-//    @IntoMap
-//    @Binds
-//    @ViewModelKey(DetailsViewModel::class)
-//    abstract fun provideDetailsViewModel(detailsViewModel: DetailsViewModel): ViewModel
+    @IntoMap
+    @Binds
+    @ViewModelKey(FilterViewModel::class)
+    abstract fun provideDetailsViewModel(filterViewModel: FilterViewModel): ViewModel
 }
