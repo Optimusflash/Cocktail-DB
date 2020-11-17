@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="default_text_style">
+        <item name="android:fontFamily">@font/roboto_thin</item>
+        <item name="android:textSize">@dimen/tv_text_size_16</item>
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

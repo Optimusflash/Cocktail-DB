@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CocktailDB</string>
+    <string name="retry">Retry</string>
+    <string name="error_message">Something was wrong. Click to retry…</string>
 </resources>
