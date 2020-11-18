@@ -3,6 +3,7 @@ package com.optimus.cocktaildb.data.paging
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.optimus.cocktaildb.data.model.Drink
+import com.optimus.cocktaildb.data.model.FilterItem
 import com.optimus.cocktaildb.data.remote.DrinkApiService
 import com.optimus.cocktaildb.di.Injector
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,12 @@ class DrinkDataSourceFactory(private val scope: CoroutineScope) :
     val drinkLiveDataSource: MutableLiveData<DrinkDataSource>
         get() = _drinkLiveDataSource
 
+    private var filterItems: List<FilterItem> = listOf()
+
+    fun setFilterItems(newItems: List<FilterItem>){
+        filterItems = newItems
+    }
+
     @Inject
     lateinit var api: DrinkApiService
 
@@ -26,7 +33,7 @@ class DrinkDataSourceFactory(private val scope: CoroutineScope) :
     }
 
     override fun create(): DataSource<String, Drink> {
-        val drinkDataSource = DrinkDataSource(scope, api)
+        val drinkDataSource = DrinkDataSource(filterItems,scope, api)
         _drinkLiveDataSource.postValue(drinkDataSource)
         return drinkDataSource
     }

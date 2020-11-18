@@ -1,11 +1,12 @@
 package com.optimus.cocktaildb.data.paging
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.optimus.cocktaildb.data.model.Drink
+import com.optimus.cocktaildb.data.model.FilterItem
 import com.optimus.cocktaildb.data.model.ViewType
 import com.optimus.cocktaildb.data.remote.DrinkApiService
-import com.optimus.cocktaildb.utils.DrinkCategory
 import com.optimus.cocktaildb.utils.State
 import kotlinx.coroutines.*
 
@@ -13,32 +14,32 @@ import kotlinx.coroutines.*
  * Created by Dmitriy Chebotar on 16.11.2020.
  */
 class DrinkDataSource(
-    private val scope: CoroutineScope,
-    private val api: DrinkApiService
+        filters: List<FilterItem>,
+        private val scope: CoroutineScope,
+        private val api: DrinkApiService
 ) : PageKeyedDataSource<String, Drink>() {
 
     val state: MutableLiveData<State> = MutableLiveData()
     private lateinit var retryBlock: () -> Unit
-    private val listCategory = DrinkCategory.values().toMutableList()
+    private val mutableFiltersList = filters.toMutableList()
 
     override fun loadInitial(
-        params: LoadInitialParams<String>,
-        callback: LoadInitialCallback<String, Drink>
+            params: LoadInitialParams<String>,
+            callback: LoadInitialCallback<String, Drink>
     ) {
+//        if (mutableFiltersList.isEmpty()) return
         scope.launch {
             try {
                 updateState(State.LOADING)
                 val result = withContext(Dispatchers.IO) {
-                    api.loadDrink(DrinkCategory.COCKTAIL.drinkGroupName).drinks
+                    api.loadDrink(mutableFiltersList.first().drinkGroupName).drinks
                 }
                 val mutableList = result.toMutableList()
-                mutableList.add(
-                    0,
-                    Drink(viewType = ViewType.HEADER, name = DrinkCategory.COCKTAIL.drinkGroupName)
-                )
-                callback.onResult(mutableList, null, DrinkCategory.MILK_FLOAT_SHAKE.drinkGroupName)
+                mutableList.add(0, Drink(viewType = ViewType.HEADER, name = mutableFiltersList.first().drinkGroupName))
+                callback.onResult(mutableList, null, nextKey(mutableFiltersList.first().drinkGroupName))
                 updateState(State.DONE)
             } catch (e: Exception) {
+                Log.e("M_DrinkDataSource", "sdfsdfsdf")
                 updateState(State.ERROR)
                 retryBlock = { loadInitial(params, callback) }
             }
@@ -53,18 +54,12 @@ class DrinkDataSource(
             try {
                 updateState(State.LOADING)
                 val key = params.key
-                val nextKey = nextKey(key)
-                if (nextKey == null) {
-                    updateState(State.DONE)
-                    this.coroutineContext.cancel()
-                    return@launch
-                }
                 val result = withContext(Dispatchers.IO) {
-                    api.loadDrink(nextKey).drinks
+                    api.loadDrink(key).drinks
                 }
-                val toMutableList = result.toMutableList()
-                toMutableList.add(0, Drink(viewType = ViewType.HEADER, name = nextKey))
-                callback.onResult(toMutableList, nextKey)
+                val mutableList = result.toMutableList()
+                mutableList.add(0, Drink(viewType = ViewType.HEADER, name = key))
+                callback.onResult(mutableList, nextKey(key))
                 updateState(State.DONE)
             } catch (e: Exception) {
                 updateState(State.ERROR)
@@ -79,8 +74,9 @@ class DrinkDataSource(
     }
 
     private fun nextKey(previousKey: String): String? {
-        val drinkCategory = listCategory.firstOrNull { it.drinkGroupName == previousKey }
-        return drinkCategory?.nextCategory()
+        val index = mutableFiltersList.indexOfFirst { it.drinkGroupName == previousKey }
+        if (index == mutableFiltersList.lastIndex) return null
+        return mutableFiltersList[index+1].drinkGroupName
     }
 
     fun retry() {

@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/tv_drink_name"
         style="@style/default_text_style"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/match_constraint"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/global_spacing_21"
         app:layout_constraintBottom_toBottomOf="@+id/iv_drink"

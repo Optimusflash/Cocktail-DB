@@ -11,15 +11,12 @@ import com.optimus.cocktaildb.extensions.loadImage
  * Created by Dmitriy Chebotar on 17.11.2020.
  */
 
-class DrinkItemViewHolder(
-    private val binding: DrinkRvCellBinding,
-
-    ) : RecyclerView.ViewHolder(binding.root) {
+class DrinkItemViewHolder(private val binding: DrinkRvCellBinding) : RecyclerView.ViewHolder(binding.root) {
 
     companion object {
         fun create(parent: ViewGroup): DrinkItemViewHolder {
             val binding =
-                DrinkRvCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    DrinkRvCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return DrinkItemViewHolder(binding)
         }
     }

@@ -3,6 +3,7 @@ package com.optimus.cocktaildb.ui.main.activities
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
 
     private val drinkPagingAdapter by lazy {
-        DrinkPagingAdapter( mainViewModel::retry)
+        DrinkPagingAdapter(mainViewModel::retry)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,13 +43,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         if(item.itemId == R.id.filter){
             val newIntent = FilterActivity.newIntent(this)
             startActivity(newIntent)
         }
         return super.onOptionsItemSelected(item)
-
     }
 
     private fun initDaggerComponent() {
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModels() {
         mainViewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-
     }
 
     private fun initViews() {
@@ -77,6 +75,41 @@ class MainActivity : AppCompatActivity() {
             if (mainViewModel.listIsEmpty().not()) {
                 drinkPagingAdapter.setState(it ?: State.DONE)
             }
+            updateUi(it)
+        })
+
+        mainViewModel.filterItems.observe(this, {
+            mainViewModel.makeRequest(it)
         })
     }
+
+    private fun updateUi(it: State?) {
+        when (it) {
+            State.LOADING -> {
+                if (mainViewModel.listIsEmpty()) {
+                    with(binding) {
+                        progressBar.visibility = View.VISIBLE
+                        mainRecyclerView.visibility = View.GONE
+                        tvError.visibility = View.GONE
+                    }
+                }
+            }
+            State.ERROR -> {
+                if (mainViewModel.listIsEmpty()) {
+                    with(binding) {
+                        progressBar.visibility = View.GONE
+                        tvError.visibility = View.VISIBLE
+                    }
+                }
+            }
+            State.DONE -> {
+                with(binding) {
+                    progressBar.visibility = View.GONE
+                    mainRecyclerView.visibility = View.VISIBLE
+                    tvError.visibility = View.GONE
+                }
+            }
+        }
+    }
+
 }

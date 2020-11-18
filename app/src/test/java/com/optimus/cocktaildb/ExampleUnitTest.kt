@@ -1,7 +1,5 @@
 package com.optimus.cocktaildb
 
-import com.optimus.cocktaildb.utils.DrinkCategory
-import com.optimus.cocktaildb.utils.Utils
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

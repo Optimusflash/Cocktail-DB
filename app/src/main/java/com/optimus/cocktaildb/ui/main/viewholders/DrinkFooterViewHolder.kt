@@ -1,5 +1,6 @@
 package com.optimus.cocktaildb.ui.main.viewholders
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +25,10 @@ class DrinkFooterViewHolder(
     }
 
     fun bind (state: State){
-        binding.progressBar.visibility = if (state == State.LOADING) View.VISIBLE else View.INVISIBLE
-        binding.btnRetry.visibility = if (state == State.ERROR) View.VISIBLE else View.INVISIBLE
-        binding.tvError.visibility = if (state == State.ERROR) View.VISIBLE else View.INVISIBLE
+        Log.e("M_DrinkFooterViewHolder", "$state")
+        binding.progressBar.visibility = if (state == State.LOADING) View.VISIBLE else View.GONE
+        binding.btnRetry.visibility = if (state == State.ERROR) View.VISIBLE else View.GONE
+        binding.tvError.visibility = if (state == State.ERROR) View.VISIBLE else View.GONE
         binding.btnRetry.setOnClickListener { retryCallback.invoke()  }
     }
 }

@@ -7,14 +7,15 @@
 
     <TextView
         android:id="@+id/tv_group_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/default_text_style"
+        android:layout_width="@dimen/match_constraint"
         android:layout_marginStart="@dimen/global_spacing_20"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/black"
-        style="@style/default_text_style"
         tools:text="Ordinary Drink" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

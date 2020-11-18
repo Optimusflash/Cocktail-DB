@@ -9,10 +9,8 @@ import com.optimus.cocktaildb.databinding.DrinkHeaderSellBinding
 /**
  * Created by Dmitriy Chebotar on 17.11.2020.
  */
-class DrinkHeaderViewHolder(
-    private val binding: DrinkHeaderSellBinding,
+class DrinkHeaderViewHolder( private val binding: DrinkHeaderSellBinding) : RecyclerView.ViewHolder(binding.root) {
 
-) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun create(parent: ViewGroup): DrinkHeaderViewHolder {
             val binding = DrinkHeaderSellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
